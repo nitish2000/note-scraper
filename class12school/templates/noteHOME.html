@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+  <script>
+      WebFont.load({
+                   google: {
+                   families: ["Lato:100,300,400,700,900","Karla:regular","Cookie:regular", "Lobster"]
+                   }
+                   });
+      </script>
+
+<title>NoTeScRaPeR</title>
+<style>
+
+    body {
+        background-image: url("http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=21695497");
+        font-family:"Lobster";
+    }
+    .jumbotron {
+        font-family:"Lobster";
+        opacity: 0.8;
+        padding-top: 10px; 
+        padding-bottom: 10px; 
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    .item{
+        background-color: white;
+        opacity: 0.8;
+    }
+    .center {
+        text-align: center;
+    }
+    .carousel-inner > .item > img {
+        margin: 0 auto;
+        opacity: 0.8;
+
+    }
+    .carousel-caption{
+        color:whitesmoke;
+        text-shadow: 0 0 8px black, 0 0 5px black;
+        /*font-family:"Lato";*/
+        opacity: 2;
+
+    }
+    .carousel-caption > p{
+        color:whitesmoke;
+        text-shadow: 0 0 5px black, 0 0 3px black;
+        font-size: 250%;
+        font-family:"Cookie";
+    }
+    .card {
+        background-color: wheat;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        width: 95%;
+        margin-top: 16px; 
+        margin-bottom: 16px;
+        padding: 8px 16px;
+        font-family:"Lato";
+
+    }
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    .panel{
+        font-family:"Lato";
+        opacity: 0.8;
+        margin-top: 24px;
+        background-color: whitesmoke;
+        color: maroon;
+        text-align: center;
+
+    }
+    #about{
+        font-family:"Lato";
+        opacity: 0.8;
+        margin-top: 24px;
+        background-color: whitesmoke;
+        color: maroon;
+        text-align: center;
+
+    }
+    .panel >p{
+        font-weight: normal;
+        color: black;
+        font-family:"Agency FB";
+        text-align: left;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="jumbotron">
+        <h1 style = "color:maroon;"><center>The NoteScraper</center></h1>
+        <h2 style = "color:black;font-family:'Cookie';"><center><q>OF Nerds,  FOR Nerds &  BY Nerds</q></center></h2>
+    </div>
+
+    <div id = "myCarousel" class = "carousel slide" data-ride="carousel">
+
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+      <div class="item active center">
+        <img src="http://www.support-my-decision.org.au/page/image/options-get-information" alt="We find data from all possible sources for you" style="width:400px; height: 300px" ismap>
+          <div class="carousel-caption"><h1>We Find</h1><p>from all possible sources for you</p></div>
+      </div>
+
+      <div class="item center">
+        <img src="http://cdn2.hubspot.net/hub/26292/file-13578194-jpg/images/online_resources.jpg" alt="We filter and collect the most relevant information for you" style="width:500px; height: 300px">
+          <div class="carousel-caption"><h1>We Collect</h1><p>the most relevant information for you</p></div>
+      </div>
+
+      <div class="item center">
+        <img src="https://www.systemation.com/images/organized-at-work-1200x480.jpg" alt="We organize everything into an easy to understand format" style="width:500px; height: 300px">
+          <div class="carousel-caption"><h1>We Organize</h1><p>everything into notes for you</p></div>
+      </div>
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+
+    <div id = "about" class="panel jumbotron">
+        <p><h3>~Welcome to Notescraper~</h3>
+            <h4><center>Tired of searching for good notes? Well, you have arrived at the right place!</center></h4>
+            <p>Notescraper is a tool that has been created in order to help students obtain notes quickly in an orderly manner from a variety of websites on any topic for the given subjects.</p></p>
+
+    </div>
+    <div id = "sub" class="panel jumbotron">
+        <p><h3><b>Click on the preferred subject</b></h3></p>
+        <div class="row">
+            {% for i in subjects %}
+                <div class="col-md-3"> <div class="card"><a href = {{ i }}>{{ i }}</a></div></div>
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+
+</body>
+</html>

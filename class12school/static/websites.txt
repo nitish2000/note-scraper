@@ -1,0 +1,26 @@
+<maths>
+https://www.mathsisfun.com/ Y
+http://mathworld.wolfram.com/ Y
+https://phet.colorado.edu/en/simulations/category/math Y
+http://math.tutorvista.com/ Y
+
+<physics>
+http://www.physicsclassroom.com Y
+https://phet.colorado.edu/en/simulations/category/physics Y
+http://hyperphysics.phy-astr.gsu.edu Y
+http://physics.tutorvista.com/ Y
+
+<chemistry>
+https://chemistry.stanford.edu Y
+http://chemistry.berkeley.edu Y
+http://www.organic-chemistry.org Y
+
+<computer science>
+https://www.w3schools.com/ Y
+https://www.programiz.com/ Y
+http://ecomputernotes.com/ Y
+
+<general>
+https://brilliant.org/ Y
+https://www.wikipedia.org/ Y
+https://www.khanacademy.org/ Y

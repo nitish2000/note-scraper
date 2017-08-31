@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>ChemScraping</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+function saveTextAsFile()
+{
+    var textToSave = document.getElementById("inputTextToSave").value;
+    var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+    var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+    var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    downloadLink.href = textToSaveAsURL;
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+}
+
+function destroyClickedElement(event)
+{
+    document.body.removeChild(event.target);
+}
+
+function loadFileAsText()
+{
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent)
+    {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        document.getElementById("inputTextToSave").value = textFromFileLoaded;
+    };
+    fileReader.readAsText(fileToLoad, "UTF-8");
+}
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+<script>
+      WebFont.load({
+                   google: {
+                   families: ["Lato:100,300,400,700,900","Karla:regular","Cookie:regular", "Lobster"]
+                   }
+                   });
+      </script>
+
+
+<style>
+
+    body {
+        background-image: url("http://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=21695497");
+        font-family:"Lobster";
+    }
+    .jumbotron {
+        font-family:"Lobster";
+        opacity: 0.8;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    .item{
+        background-color: white;
+        opacity: 0.8;
+    }
+    .center {
+        text-align: center;
+    }
+
+    .panel{
+        font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+        margin-top: 24px;
+        background-color: whitesmoke;
+        color: maroon;
+        /*text-align: center;*/
+
+    }
+    .panel >p{
+        font-weight: normal;
+        color: black;
+        text-align: left;
+    }
+    #submit{
+        color: black;
+    }
+</style>
+<body>
+<div class="container">
+
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-2" style="border-right: 1px dashed #333;"> <h2 style = "color:black;"><center>The <br> NoteScraper</center></h2></div>
+            <div class="col-lg-8"><h1 style = "color:black;font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif;font-weight:bold;"><center>Chemistry</center></h1></div>
+            <div class="col-lg-2" style="border-left: 1px dashed #333;"> <h2 style = "color:black;"><center>Nerd <br> Land </center></h2></div>
+    </div>
+    </div>
+ <div id = "about" class="panel jumbotron">
+        <p><h3><b>About</b></h3></p>
+        <img src = "https://www.wits.ac.za/media/wits-university/faculties-and-schools/science/-chemistry/images/Chemistry-image-1200-x-500-1200x500.jpg" align = "right" height = "170" width = 280>
+        <p>Chemistry is a branch of physical science that studies the composition, structure, properties and change of matter. Chemistry includes topics such as the properties of individual atoms, how atoms form chemical bonds to create chemical compounds, the interactions of substances through intermolecular forces that give matter its general properties, and the interactions between substances through chemical reactions to form different substances.</p>
+    </div>
+
+    <div id = "about" class="panel jumbotron">
+        <p><h3><b>Take Notes</b></h3></p>
+        <div id = "submit">
+        <form id="text" method="post">
+            <textarea id="inputTextToSave" rows = "10" cols = "145" ></textarea><br>
+            Enter File Name: <input id="inputFileNameToSaveAs"></input>
+            <button onclick="saveTextAsFile()">Save Text to File</button>
+            </form>
+        </div>
+    </div>
+
+   <div id = "about" class="panel jumbotron">
+        <p><h3><b>Search</b></h3></p>
+        <p>The ChemScraper will collect the required information related to the topic you will type in the search bar. Go ahead!</p>
+        <div id = "submit">
+            <input type = "text" name = "Enter required topic...." size = "135">
+            <input type = "submit" value = "Search">
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
