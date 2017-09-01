@@ -55,6 +55,11 @@ http://flask.pocoo.org/docs/0.12/patterns/sqlite3/     https://sqlite.org/quicks
 12. class & objects, data file-handling ---  compulsory concepts to be included in the project
 
 
-13. https://www.analyticsvidhya.com/blog/2015/10/beginner-guide-web-scraping-beautiful-soup-python/
+13. Jinja2 :
+    http://jinja.pocoo.org/docs/2.9/
+    https://www.fullstackpython.com/jinja2.html
+    https://realpython.com/blog/python/primer-on-jinja-templating/
+
+14. https://www.analyticsvidhya.com/blog/2015/10/beginner-guide-web-scraping-beautiful-soup-python/
     https://medium.freecodecamp.org/how-to-scrape-websites-with-python-and-beautifulsoup-5946935d93fe
     http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python
