@@ -34,6 +34,7 @@
 7. there are jpeg images and there is hi.py which contains some code regarding regular expressions. basically it's about pulling websites from the websites text file but it's incomplete.
 
 
+
 8. BeautifulSoup4(bs4) Beautiful Soup is a Python library for pulling data out of HTML and XML files. It works with your favorite parser to provide idiomatic ways of navigating, searching, and modifying the parse tree. It commonly saves programmers hours or days of work.https://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&cad=rja&uact=8&ved=0ahUKEwiusKHojYTWAhWLpo8KHYwSBlwQFggvMAI&url=https%3A%2F%2Fwww.crummy.com%2Fsoftware%2FBeautifulSoup%2Fbs4%2Fdoc%2F&usg=AFQjCNEjTA5uJ8CpiFoBcuUr2OHbIDHSrg
 
 
@@ -41,3 +42,10 @@
 9. Model–view–controller (MVC) is a software architectural pattern for implementing user interfaces on computers. It divides a given application into three interconnected parts. This is done to separate internal representations of information from the ways information is presented to, and accepted from, the user.The MVC design pattern decouples these major components allowing for efficient code reuse and parallel development.https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
 
 
+10. User class: for the user, subject class: for the various subjects, content provider class: for getting the notes, authentication class: for logging into sites like meritnatin, khanacademy, etc.
+
+
+11. SQlite: To make a database containing userid and passwords for websites from which data can be obtained only after logging into them.
+
+
+12. class & objects, data file-handling ---  compulsory concepts to be included in the project
