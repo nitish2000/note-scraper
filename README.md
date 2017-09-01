@@ -42,7 +42,7 @@ http://www.pythonforbeginners.com/beautifulsoup/beautifulsoup-4-python
 https://www.dataquest.io/blog/web-scraping-tutorial-python/
 
 
-9. Model–view–controller (MVC) is a software architectural pattern for implementing user interfaces on computers. It divides a given application into three interconnected parts. This is done to separate internal representations of information from the ways information is presented to, and accepted from, the user.The MVC design pattern decouples these major components allowing for efficient code reuse and parallel development.https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
+9. Model–view–controller (MVC) is a software architectural pattern for implementing user interfaces on computers. It divides a given application into three interconnected parts. This is done to separate internal representations of information from the ways information is presented to, and accepted from, the user.The MVC design pattern decouples these major components allowing for efficient code reuse and parallel development.https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller 
 
 
 10. User class: for the user, subject class: for the various subjects, content provider class: for getting the notes, authentication class: for logging into sites like meritnatin, khanacademy, etc. Classes to be implemented in the main python file running on flask framework (NotesPro). http://flask.pocoo.org/docs/0.12/   http://flask.pocoo.org/docs/0.12/views/   https://stackoverflow.com/questions/40460846/using-flask-inside-class     
@@ -62,4 +62,9 @@ http://flask.pocoo.org/docs/0.12/patterns/sqlite3/     https://sqlite.org/quicks
 
 14. https://www.analyticsvidhya.com/blog/2015/10/beginner-guide-web-scraping-beautiful-soup-python/
     https://medium.freecodecamp.org/how-to-scrape-websites-with-python-and-beautifulsoup-5946935d93fe
-    http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python
+    http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python  --- file handling
+    https://stackoverflow.com/questions/38042632/mvc-the-simplest-example  --- MVC python
+    https://stackoverflow.com/questions/68986/whats-a-good-lightweight-python-mvc-framework?rq=1 ---- MVC framework
+    U need to use an MVC framework in python. there are many. install the one of your choice
+    https://djangobook.com/model-view-controller-design-pattern/
+    
