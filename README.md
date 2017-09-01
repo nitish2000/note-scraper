@@ -42,10 +42,10 @@
 9. Model–view–controller (MVC) is a software architectural pattern for implementing user interfaces on computers. It divides a given application into three interconnected parts. This is done to separate internal representations of information from the ways information is presented to, and accepted from, the user.The MVC design pattern decouples these major components allowing for efficient code reuse and parallel development.https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
 
 
-10. User class: for the user, subject class: for the various subjects, content provider class: for getting the notes, authentication class: for logging into sites like meritnatin, khanacademy, etc.
+10. User class: for the user, subject class: for the various subjects, content provider class: for getting the notes, authentication class: for logging into sites like meritnatin, khanacademy, etc. Classes to be implemented in the main python file running on flask framework (NotesPro). http://flask.pocoo.org/docs/0.12/   http://flask.pocoo.org/docs/0.12/views/   https://stackoverflow.com/questions/40460846/using-flask-inside-class     
 
 
-11. SQlite: To make a database containing userid and passwords for websites from which data can be obtained only after logging into them.
+11. SQlite: To make a database containing userid and passwords for websites from which data can be obtained only after logging into them. It's a package (just like bs4) which needs to be installed in your IDE. The module can be imported using an import statement after installation. http://flask.pocoo.org/docs/0.12/patterns/sqlite3/     https://sqlite.org/quickstart.html      https://www.tutorialspoint.com/flask/flask_sqlite.htm
 
 
 12. class & objects, data file-handling ---  compulsory concepts to be included in the project
