@@ -31,7 +31,7 @@ def getResults():
     return render_template("result.html", result=sites)
 def getSites():
     result = []
-    f = open("C:\Users\\nitish_24\PycharmProjects\class12school\static\websites.txt", "r")
+    f = open("./static/websites.txt", "r")
     lines = f.read().splitlines()
     f.close()
     result.append(''.join(str(e) for e in lines))
