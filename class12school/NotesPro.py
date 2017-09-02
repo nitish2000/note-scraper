@@ -1,9 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import re, json, requests, urllib2
 from bs4 import BeautifulSoup
+import sqlite3 as sql
 
 app = Flask(__name__)
-
 
 @app.route('/Notescraper')
 def Notescraper():
@@ -54,40 +54,70 @@ def getSites():
     # souping sites by key
     information=[]
     for obj in data:
-        print obj
         if (obj["key"] == "maths"):
             for site in obj['value']:
                 page = requests.get(site)
                 soup = BeautifulSoup(page.content, 'html.parser')
                 information.append(str(list(soup.children)))
-                print information
-        if (obj["key"] == "physics"):
-            for site in obj['value']:
-                page = requests.get(site)
-                soup = BeautifulSoup(page.content, 'html.parser')
-                information.append(str(list(soup.children)))
-                print information
-        # if (obj["key"] == "chemistry"):
-        #     for site in obj['value']:
-        #         page = requests.get(site)
-        #         soup = BeautifulSoup(page.content, 'html.parser')
-        #         information.append(str(list(soup.children)))
-        #         print information
-        # if (obj["key"] == "computer science"):
-        #     for site in obj['value']:
-        #         page = requests.get(site)
-        #         soup = BeautifulSoup(page.content, 'html.parser')
-        #         information.append(str(list(soup.children)))
-        #         print information
-        # if (obj["key"] == "general"):
-        #     for site in obj['value']:
-        #         page = requests.get(site)
-        #         soup = BeautifulSoup(page.content, 'html.parser')
-        #         information.append(str(list(soup.children)))
-        #         print information
-    
+
     return information
     
+
+def createTable():
+    conn = sql.connect('database.db')
+    print "Opened database successfully";
+
+    conn.execute('CREATE TABLE websites (name TEXT, link TEXT, uid TEXT, pw TEXT)')
+    print "Table created successfully";
+    conn.close()
+
+@app.route('/')
+def home():
+    try:
+        createTable()
+    except:
+        print ("table exists")
+    return render_template('home.html')
+
+@app.route('/listing')
+def listing():
+   con = sql.connect("database.db")
+   con.row_factory = sql.Row
+   
+   cur = con.cursor()
+   cur.execute("select * from websites")
+   
+   rows = cur.fetchall(); 
+   return render_template("listing.html",rows = rows)
+
+@app.route('/enternew')
+def new_website():
+   return render_template('websiteAdd.html')
+
+@app.route('/addrec', methods = ['POST', 'GET'])
+def addrec():
+   if request.method == 'POST':
+      try:
+         name = request.form['name']
+         link = request.form['link']
+         uid = request.form['uid']
+         pw = request.form['pw']
+         
+         with sql.connect("database.db") as con:
+            cur = con.cursor()
+            cur.execute("INSERT INTO websites (name,link,uid,pw) VALUES (?,?,?,?)",(name,link,uid,pw))
+            
+            con.commit()
+            msg = "Record successfully added"
+      except:
+         con.rollback()
+         msg = "error in insert operation"
+      
+      finally:
+         return render_template("resultDB.html",msg = msg)
+         con.close()
+
+
 def process():
     pass
 app.run(debug = True)

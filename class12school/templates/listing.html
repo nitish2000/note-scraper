@@ -93,25 +93,25 @@ function loadFileAsText()
 </style>
 <body>
 <div class="container">
-
-    <div id = "about" class="panel jumbotron">
-        <p><h3><b>Take Notes</b></h3></p>
-        <div id = "submit">
-            <form id="text" method="post">
-                <textarea id="inputTextToSave" rows = "2" cols = "145" ></textarea><br>
-                Enter File Name: <input id="inputFileNameToSaveAs"></input>
-                <button onclick="saveTextAsFile()">Save Text to File</button>
-            </form>
-        </div>
-    </div>
-
-    <div id = "about" class="panel jumbotron">
-        <p><h3><b>Search Results</b></h3></p>
-            {% for value in result %}
-            <p> {{ value }}</p>
-            {% endfor %}  
-    </div>
-   
+    <table border = 1>
+        <thead>
+           <td>Name</td>
+           <td>Link>/td<
+           <td>UserID</td>
+           <td>Password</td>
+        </thead>
+        
+        {% for row in rows %}
+           <tr>
+              <td>{{row["name"]}}</td>
+              <td>{{row["link"]}}</td>
+              <td>{{ row["uid"]}}</td>
+              <td>{{row['pw']}}</td>	
+           </tr>
+        {% endfor %}
+     </table>
+     
+     <a href = "/">Go back to home page</a>
 </div>
 
 </body>
