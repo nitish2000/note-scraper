@@ -1,5 +1,6 @@
 from flask import Flask, render_template
-import re, json
+import re, json, requests, urllib2
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -31,25 +32,62 @@ def getResults():
     return render_template("result.html", result=sites)
 
 def getSites():
-    data = []
+    # file handling
     f = open("./static/websites.txt", "r")
     lines = f.read().splitlines()
     f.close()
+    
+    # iterating sites into key/value pairs
+    data = []
     l={}
+    i=0
     for line in lines:
-        print line
         if re.search('<*>', line):
-            data.append(json.dumps(l))
+            if (i!=0):
+                data.append(l)
+            i+=1
             l={}
             l['key'] = re.search('<(.*)>', line).group(1)
             l['value'] = []
-        elif line!="":
+        elif re.search('http*', line):
             l['value'].append(line[:-1])
-
-    return data
-
-
-    return render_template("result.html", result = l)
+    # souping sites by key
+    information=[]
+    for obj in data:
+        print obj
+        if (obj["key"] == "maths"):
+            for site in obj['value']:
+                page = requests.get(site)
+                soup = BeautifulSoup(page.content, 'html.parser')
+                information.append(str(list(soup.children)))
+                print information
+        if (obj["key"] == "physics"):
+            for site in obj['value']:
+                page = requests.get(site)
+                soup = BeautifulSoup(page.content, 'html.parser')
+                information.append(str(list(soup.children)))
+                print information
+        # if (obj["key"] == "chemistry"):
+        #     for site in obj['value']:
+        #         page = requests.get(site)
+        #         soup = BeautifulSoup(page.content, 'html.parser')
+        #         information.append(str(list(soup.children)))
+        #         print information
+        # if (obj["key"] == "computer science"):
+        #     for site in obj['value']:
+        #         page = requests.get(site)
+        #         soup = BeautifulSoup(page.content, 'html.parser')
+        #         information.append(str(list(soup.children)))
+        #         print information
+        # if (obj["key"] == "general"):
+        #     for site in obj['value']:
+        #         page = requests.get(site)
+        #         soup = BeautifulSoup(page.content, 'html.parser')
+        #         information.append(str(list(soup.children)))
+        #         print information
+    
+    return information
+    
 def process():
     pass
 app.run(debug = True)
