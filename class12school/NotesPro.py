@@ -35,8 +35,7 @@ def getNotes(sub):
     cur.execute("SELECT * FROM websites WHERE name=?", (sub,))
     
     rows = cur.fetchall()
-    return render_template("scrapeResults.html", result = rows)
-    return "done"
+    return render_template("scrapeResults.html", result = rows, item=request.form['searchItem'])
 
 @app.route('/search', methods = ['GET', 'POST'])
 def getResults():    
