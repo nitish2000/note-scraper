@@ -76,7 +76,7 @@ def createTable():
     conn = sql.connect('database.db')
     print "Opened database successfully";
 
-    conn.execute('CREATE TABLE websites (name TEXT, link TEXT, uid TEXT, pw TEXT)')
+    conn.execute('CREATE TABLE websites (name TEXT, link TEXT PRIMARY KEY, uid TEXT, pw TEXT)')
     print "Table created successfully";
     conn.close()
 
@@ -128,7 +128,9 @@ def addrec():
 
 
 def process():
+    
     pass
+
 app.run(debug = True)
 
 
