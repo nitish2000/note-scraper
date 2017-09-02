@@ -26,13 +26,13 @@ def Chemistry():
 def CompSci():
     return render_template("searchnitish.html")
 
-@app.route('/getMathNotes', methods = ['GET', 'POST'])
-def getMathNotes():
+@app.route('/getNotes/<sub>', methods = ['GET', 'POST'])
+def getNotes(sub):
     con = sql.connect("database.db")
     con.row_factory = sql.Row
     
     cur = con.cursor()
-    cur.execute("SELECT * FROM websites WHERE name=?", ("maths",))
+    cur.execute("SELECT * FROM websites WHERE name=?", (sub,))
     
     rows = cur.fetchall()
     return render_template("scrapeResults.html", result = rows)
