@@ -92,32 +92,27 @@ function loadFileAsText()
     }
 </style>
 <body>
-
 <div class="container">
-    
-    <div class="panel jumbotron">
-       <h1> <b> Dear User </b> </h1>
-        
-    </div>
-    <div class="jumbotron panel">
-        <br>
-        <h3> Not happy with the current database? </h3><br>
-        <ul>
-        <li><a href = "/enternew">Add a new record</a><br><br></li>
-        <li><a href = "/search">Add new records from websites.txt</a><br><br></li>
-        <li><a href = "/listing">Show List</a><br><br></li>
-        </ul>
 
-        <h3> Scrape your notes: </h3><br>
-        <ul>
-        <li><a href = "/Notescraper">Notescraper | for subject specific scraping</a><br><br></li>
-        <li><a href = "/General">Scrape Anything from Any subject</a><br><br></li>
-        </ul>
+    <div id = "about" class="panel jumbotron">
+        <p><h3><b>Take Notes</b></h3></p>
+        <div id = "submit">
+            <form id="text" method="post">
+                <textarea id="inputTextToSave" rows = "2" cols = "145" ></textarea><br>
+                Enter File Name: <input id="inputFileNameToSaveAs"></input>
+                <button onclick="saveTextAsFile()">Save Text to File</button>
+            </form>
+        </div>
     </div>
 
-    <div class="panel jumbotron" style ="text-align:right;">
-        <h3 style="font-family:'Cookie';">~ The Notescraper Team</h3>
-    </div>     
+    <div id = "about" class="panel jumbotron">
+        <p><h3><b>Search Results</b></h3></p>
+            {% for value in result %}
+            <p> {{ value }}</p>
+            {% endfor %}  
+    </div>
+   
 </div>
+
 </body>
 </html>

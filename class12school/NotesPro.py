@@ -27,11 +27,7 @@ def CompSci():
     return render_template("searchnitish.html")
 
 @app.route('/search', methods = ['GET', 'POST'])
-def getResults():
-    sites = getSites()
-    return render_template("result.html", result=sites)
-
-def getSites():
+def getResults():    
     # file handling
     f = open("./static/websites.txt", "r")
     lines = f.read().splitlines()
@@ -61,14 +57,14 @@ def getSites():
                     cur.execute("INSERT INTO websites (name,link,uid,pw) VALUES (?,?,?,?)",(obj['key'],site,"erm","erm"))
                     con.commit()
                     msg.append("Record successfully added")
-            except:
+            except Exception as e:
                 con.rollback()
-                msg.append("error in insert operation")
+                msg.append("error in insert operation: "+ str(e))
             finally:
                 # return msg
                 con.close()
 
-    return msg
+    return render_template("result.html", result=msg)
 
     
 
@@ -76,8 +72,9 @@ def createTable():
     conn = sql.connect('database.db')
     print "Opened database successfully";
 
-    conn.execute('CREATE TABLE websites (name TEXT, link TEXT PRIMARY KEY, uid TEXT, pw TEXT)')
+    conn.execute('CREATE TABLE websites (name TEXT, link TEXT UNIQUE, uid TEXT, pw TEXT)')
     print "Table created successfully";
+
     conn.close()
 
 @app.route('/')

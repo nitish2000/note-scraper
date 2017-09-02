@@ -1,5 +1,10 @@
 # note-scraper #
 
+1. please go to: http://127.0.0.1:5000/
+2. Then go to: http://127.0.0.1:5000/Notescraper
+
+(order important)
+
 ## noteHome ##
     the html file for the main webpage in which we have used bootstrap, html, css and jinja.
 
