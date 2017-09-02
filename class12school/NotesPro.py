@@ -1,8 +1,7 @@
 from flask import Flask, render_template
-import re
+import re, json
 
 app = Flask(__name__)
-
 
 
 @app.route('/Notescraper')
@@ -25,42 +24,30 @@ def Chemistry():
 @app.route('/Computer Science', methods=['GET', 'POST'])
 def CompSci():
     return render_template("searchnitish.html")
+
 @app.route('/search', methods = ['GET', 'POST'])
 def getResults():
     sites = getSites()
     return render_template("result.html", result=sites)
+
 def getSites():
-    result = []
+    data = []
     f = open("./static/websites.txt", "r")
     lines = f.read().splitlines()
     f.close()
-    result.append(''.join(str(e) for e in lines))
-    loadSites(result)
-    #return sites
-def loadSites(sites):
-    sites = str(sites)
-    re.search('http://.*Y', 'Y', flags=0)
-    l = []
-    a = sites[0:7]
-    l.append(a)
-    b = sites[7:152].split('Y')
-    l.append(b)
-    c = sites[152:161]
-    l.append(c)
-    d = sites[161:323].split('Y')
-    l.append(d)
-    e = sites[323:334]
-    l.append(e)
-    f = sites[334:431].split('Y')
-    l.append(f)
-    g = sites[431:449]
-    l.append(g)
-    h = sites[449:533].split('Y')
-    l.append(h)
-    i = sites[533:542]
-    l.append(i)
-    j = sites[542:].split('Y')
-    l.append(j)
+    l={}
+    for line in lines:
+        print line
+        if re.search('<*>', line):
+            data.append(json.dumps(l))
+            l={}
+            l['key'] = re.search('<(.*)>', line).group(1)
+            l['value'] = []
+        elif line!="":
+            l['value'].append(line[:-1])
+
+    return data
+
 
     return render_template("result.html", result = l)
 def process():
