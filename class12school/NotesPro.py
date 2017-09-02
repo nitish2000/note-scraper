@@ -26,6 +26,18 @@ def Chemistry():
 def CompSci():
     return render_template("searchnitish.html")
 
+@app.route('/getMathNotes', methods = ['GET', 'POST'])
+def getMathNotes():
+    con = sql.connect("database.db")
+    con.row_factory = sql.Row
+    
+    cur = con.cursor()
+    cur.execute("SELECT * FROM websites WHERE name=?", ("maths",))
+    
+    rows = cur.fetchall()
+    return render_template("scrapeResults.html", result = rows)
+    return "done"
+
 @app.route('/search', methods = ['GET', 'POST'])
 def getResults():    
     # file handling
@@ -93,7 +105,7 @@ def listing():
    cur = con.cursor()
    cur.execute("select * from websites")
    
-   rows = cur.fetchall(); 
+   rows = cur.fetchall() 
    return render_template("listing.html",rows = rows)
 
 @app.route('/enternew')
