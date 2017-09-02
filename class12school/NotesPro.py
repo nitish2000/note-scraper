@@ -51,16 +51,25 @@ def getSites():
             l['value'] = []
         elif re.search('http*', line):
             l['value'].append(line[:-1])
-    # souping sites by key
-    information=[]
+    # adding websites.txt to database
+    msg =[]
     for obj in data:
-        if (obj["key"] == "maths"):
-            for site in obj['value']:
-                page = requests.get(site)
-                soup = BeautifulSoup(page.content, 'html.parser')
-                information.append(str(list(soup.children)))
+        for site in obj['value']:
+            try:
+                with sql.connect("database.db") as con:
+                    cur = con.cursor()
+                    cur.execute("INSERT INTO websites (name,link,uid,pw) VALUES (?,?,?,?)",(obj['key'],site,"erm","erm"))
+                    con.commit()
+                    msg.append("Record successfully added")
+            except:
+                con.rollback()
+                msg.append("error in insert operation")
+            finally:
+                # return msg
+                con.close()
 
-    return information
+    return msg
+
     
 
 def createTable():

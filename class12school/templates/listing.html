@@ -92,17 +92,17 @@ function loadFileAsText()
     }
 </style>
 <body>
-<div class="container">
-    <table border = 1>
-        <thead>
+<div class="container panel">
+    <table border = 1 cellpadding=10>
+        <thead style="overflow: auto; height: 60px; width: 200px;">
            <td>Name</td>
-           <td>Link>/td<
+           <td>Link</td>
            <td>UserID</td>
            <td>Password</td>
         </thead>
         
         {% for row in rows %}
-           <tr>
+           <tr class = "tableformat">
               <td>{{row["name"]}}</td>
               <td>{{row["link"]}}</td>
               <td>{{ row["uid"]}}</td>
