@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>result</title>
+<title>newUser</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -92,38 +92,13 @@ function loadFileAsText()
     }
 </style>
 <body>
-
-<div class="container">
-    
-    <div class="panel jumbotron">
-       <h1> <b> Dear {{ usrname }} </b> </h1>
-        
-    </div>
-    <div class="jumbotron panel">
-        <br>
-        <h3> 1. Are you a: </h3><br>
-        <ul>
-        <li><a href = "/addUser">New User? Register Your Account</a><br><br></li>
-        <li><a href = "/loginPage">Returning user? Login with your account</a><br><br></li>
-        </ul>
-
-        <h3> 2. Customize your scraper by adding new wesites: </h3><br>
-        <ul>
-        <li><a href = "/enternew">Add a new record</a><br><br></li>
-        <li><a href = "/search">Add new records from websites.txt (developers only) </a><br><br></li>
-        <li><a href = "/listing">Show a List of websites</a><br><br></li>
-        </ul>
-
-        <h3> 3. Scrape your notes: </h3><br>
-        <ul>
-        <li><a href = "/Notescraper"> @Notescraper | subject specific scraping</a><br><br></li>
-        <li><a href = "/General"> @General | scrape anything from anywhere</a><br><br></li>
-        </ul>
-    </div>
-
-    <div class="panel jumbotron" style ="text-align:right;">
-        <h3 style="font-family:'Cookie';">~ The Notescraper Team</h3>
-    </div>     
+<div class="container jumbotron">
+    <h1> {{ msg }} </h1>
+    <h2> user name : {{ user.userName }} </h2>
+    <h2> table name : {{ user.table }} </h2>
+    <br>
+    <h2><a href = "\">go back to home page</a></h2>
 </div>
+
 </body>
 </html>

@@ -2,43 +2,61 @@ from flask import Flask, render_template, request
 import re, json, requests, urllib2
 from bs4 import BeautifulSoup
 import sqlite3 as sql
+import wolframalpha
+import userClass
+from copy import deepcopy
 
 app = Flask(__name__)
 
+user = userClass.defaultUser()
+
+def changeUser(userNew = user):
+    global user
+    user = deepcopy(userNew)
+
+def getUser():
+    global user
+    return user
+
+########################
+# VIEW CONTROL METHODS #
+########################
+
 @app.route('/Notescraper')
-def Notescraper():
+def Notescraper(user=user):
     sub = ["Mathematics", "Physics", "Chemistry", "Computer Science"]
     return render_template("noteHOME.html", subjects = sub)
 
 @app.route('/Mathematics', methods=['GET', 'POST'])
-def Mathematics():
+def Mathematics(user=user):
     return render_template("searchMath.html")
 
 @app.route('/Physics', methods=['GET', 'POST'])
-def Physics():
+def Physics(user=user):
     return render_template("searchPhys.html")
 
 @app.route('/Chemistry', methods=['GET', 'POST'])
-def Chemistry():
+def Chemistry(user=user):
     return render_template("searchChem.html")
 
 @app.route('/Computer Science', methods=['GET', 'POST'])
-def CompSci():
+def CompSci(user=user):
     return render_template("searchnitish.html")
 
 @app.route('/getNotes/<sub>', methods = ['GET', 'POST'])
-def getNotes(sub):
+def getNotes(sub, user=user):
     con = sql.connect("database.db")
     con.row_factory = sql.Row
     
     cur = con.cursor()
-    cur.execute("SELECT * FROM websites WHERE name=?", (sub,))
+    cur.execute("SELECT * FROM [" +user.table+ "] WHERE name=?", (sub,))
     
     rows = cur.fetchall()
     return render_template("scrapeResults.html", result = rows, item=request.form['searchItem'])
 
 @app.route('/search', methods = ['GET', 'POST'])
-def getResults():    
+def getResults(user=user):   
+    user = getUser() 
     # file handling
     f = open("./static/websites.txt", "r")
     lines = f.read().splitlines()
@@ -65,7 +83,7 @@ def getResults():
             try:
                 with sql.connect("database.db") as con:
                     cur = con.cursor()
-                    cur.execute("INSERT INTO websites (name,link,uid,pw) VALUES (?,?,?,?)",(obj['key'],site,"erm","erm"))
+                    cur.execute("INSERT INTO [" +user.table+ "] (name,link,uid,pw) VALUES (?,?,?,?)",(obj['key'],site,"erm","erm"))
                     con.commit()
                     msg.append("Record successfully added")
             except Exception as e:
@@ -77,35 +95,66 @@ def getResults():
 
     return render_template("result.html", result=msg)
 
-    
 
-def createTable():
-    conn = sql.connect('database.db')
-    print "Opened database successfully";
+######################### 
+# MODEL CONTROL METHODS #
+######################### 
 
-    conn.execute('CREATE TABLE websites (name TEXT, link TEXT UNIQUE, uid TEXT, pw TEXT)')
-    print "Table created successfully";
+@app.before_first_request
+def _run_on_start():
+    user = getUser()
+    createWebsitesTable(user)
+    createUserTable()
+    print ("started")
 
-    conn.close()
+def createWebsitesTable(user=user):
+    user = getUser()
+    try:
+        conn = sql.connect('database.db')
+        print "Opened database successfully";
+        conn.execute('CREATE TABLE IF NOT EXISTS ['+user.table+'](name TEXT, link TEXT UNIQUE, uid TEXT, pw TEXT)')
+        print "Table MADE";
+        conn.close()
+    except Exception as e:
+        print (e)
+
+
+def createUserTable():
+    try:
+        with sql.connect("database.db") as con:
+            cur = con.cursor()
+            cur.execute('CREATE TABLE IF NOT EXISTS listOfUsers(usrname TEXT UNIQUE, pword TEXT, tname TEXT)')
+            con.commit()
+            print "Table EXISTS";
+    except Exception as e:
+        con.rollback()
+        print (e)
+    finally:
+        con.close()
 
 @app.route('/')
-def home():
-    try:
-        createTable()
-    except:
-        print ("table exists")
-    return render_template('home.html')
+def home(user=user):
+    user = getUser()
+    usrname = user.userName
+    if user.userName == "default":
+        usrname = "User"
+    return render_template('home.html', usrname = usrname)
 
 @app.route('/listing')
-def listing():
-   con = sql.connect("database.db")
-   con.row_factory = sql.Row
-   
-   cur = con.cursor()
-   cur.execute("select * from websites")
-   
-   rows = cur.fetchall() 
-   return render_template("listing.html",rows = rows)
+def listing(user=user):
+    user = getUser()
+    con = sql.connect("database.db")
+    con.row_factory = sql.Row
+    
+    cur = con.cursor()
+    cur.execute("select * from [" +user.table+ "]")
+    rowsWebsites = cur.fetchall() 
+    cur.execute("select * from listOfUsers")
+    rowsUsers = cur.fetchall() 
+    return render_template("listing.html",rowsWebsites = rowsWebsites, rowsUsers=rowsUsers)
+
+
+# WEBSITES TABLE HANDLING #
 
 @app.route('/enternew')
 def new_website():
@@ -113,30 +162,108 @@ def new_website():
 
 @app.route('/addrec', methods = ['POST', 'GET'])
 def addrec():
-   if request.method == 'POST':
-      try:
-         name = request.form['name']
-         link = request.form['link']
-         uid = request.form['uid']
-         pw = request.form['pw']
-         
-         with sql.connect("database.db") as con:
-            cur = con.cursor()
-            cur.execute("INSERT INTO websites (name,link,uid,pw) VALUES (?,?,?,?)",(name,link,uid,pw))
+    user = getUser()
+    if request.method == 'POST':
+        try:
+            name = request.form['name']
+            link = request.form['link']
+            uid = request.form['uid']
+            pw = request.form['pw']
             
-            con.commit()
-            msg = "Record successfully added"
-      except:
-         con.rollback()
-         msg = "error in insert operation"
+            with sql.connect("database.db") as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO [" +user.table+ "] (name,link,uid,pw) VALUES (?,?,?,?)",(name,link,uid,pw))
+                
+                con.commit()
+                msg = "Record successfully added"
+        except:
+            con.rollback()
+            msg = "error in insert operation"
       
-      finally:
-         return render_template("resultDB.html",msg = msg)
-         con.close()
+        finally:
+            con.close()
+            return render_template("resultDB.html",msg = msg)
 
+
+# USER TABLE NEW ACCOUNT #
+
+@app.route('/addUser')
+def addUser():
+   return render_template('userAdd.html', msg="", username ="")
+
+@app.route('/newUser', methods = ['POST', 'GET'])
+def newUser(user = user):
+    if request.method == 'POST':
+        
+        if request.form['pword'] != request.form['pwordRepeat']:
+            return render_template('userAdd.html', msg = "passwords don't match", username=request.form['usrname'])
+
+        else:
+            try:
+                userNew = userClass.User()
+                userNew.userName = request.form['usrname']
+                userNew.password = request.form['pword']
+                userNew.table = str(userNew.userName) + "_websites"
+
+                with sql.connect("database.db") as con:
+                    cur = con.cursor()
+                    cur.execute("INSERT INTO listOfUsers (usrname,pword,tname) VALUES (?,?,?)",(userNew.userName,userNew.password,userNew.table))
+                    
+                    con.commit()
+                    msg = "Your account with has been created successfully: "
+                    changeUser(userNew)
+                    user = getUser()
+                    createWebsitesTable(user)
+                
+            except Exception as e:
+                con.rollback()
+                msg = str(e)+"\nSorry, this user name is already in use: "
+            
+            finally:
+                
+                con.close()
+                return render_template("newUser.html", msg = msg, user = user)
+
+# USER TABLE OLD ACCOUNT #
+
+@app.route('/loginPage')
+def loginUser():
+   return render_template('loginPage.html', msg="", username ="")
+
+@app.route('/loginMsg', methods = ['POST', 'GET'])
+def oldUser(user = user):
+    if request.method == 'POST':
+
+        try:
+            userNew = userClass.User()
+            userNew.userName = request.form['usrname']
+            userNew.password = request.form['pword']
+            userNew.table = str(userNew.userName) + "_websites"
+
+            with sql.connect("database.db") as con:
+                con = sql.connect("database.db")
+                con.row_factory = sql.Row
+                cur = con.cursor()
+                statement = "SELECT count(*) FROM listOfUsers WHERE usrname = ? AND pword = ?"
+                print statement
+                c = cur.execute(statement,(userNew.userName, userNew.password))
+                data=cur.fetchone()[0]
+                if data!=0:
+                    changeUser(userNew)
+                    user = getUser()
+                    msg = "\nLogged in Successfully: "
+                else:
+                    msg = "\nSorry, your account does not exist with the details: "
+            
+        except Exception as e:
+            con.rollback()
+            msg = str(e)+"Something Went Wrong"
+        
+        finally:
+            con.close()
+            return render_template("loginMsg.html", msg = msg, user = user)
 
 def process():
-    
     pass
 
 app.run(debug = True)

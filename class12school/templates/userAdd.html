@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>result</title>
+<title>userAdd</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -92,38 +92,22 @@ function loadFileAsText()
     }
 </style>
 <body>
-
-<div class="container">
-    
-    <div class="panel jumbotron">
-       <h1> <b> Dear {{ usrname }} </b> </h1>
+<div class="container panel">
+    <form action = "{{ url_for('newUser') }}" method = "POST">
+        <h3>Create Your Account</h3>
+        Name<br>
+        <input type = "text" name = "usrname" value="{{ username }}" /></br>
         
-    </div>
-    <div class="jumbotron panel">
-        <br>
-        <h3> 1. Are you a: </h3><br>
-        <ul>
-        <li><a href = "/addUser">New User? Register Your Account</a><br><br></li>
-        <li><a href = "/loginPage">Returning user? Login with your account</a><br><br></li>
-        </ul>
+        Password<br>
+        <input type = "password" name = "pword" /><br>
 
-        <h3> 2. Customize your scraper by adding new wesites: </h3><br>
-        <ul>
-        <li><a href = "/enternew">Add a new record</a><br><br></li>
-        <li><a href = "/search">Add new records from websites.txt (developers only) </a><br><br></li>
-        <li><a href = "/listing">Show a List of websites</a><br><br></li>
-        </ul>
-
-        <h3> 3. Scrape your notes: </h3><br>
-        <ul>
-        <li><a href = "/Notescraper"> @Notescraper | subject specific scraping</a><br><br></li>
-        <li><a href = "/General"> @General | scrape anything from anywhere</a><br><br></li>
-        </ul>
-    </div>
-
-    <div class="panel jumbotron" style ="text-align:right;">
-        <h3 style="font-family:'Cookie';">~ The Notescraper Team</h3>
-    </div>     
+        Repeat Password<br>
+        <input type = "password" name = "pwordRepeat" /><br><br>
+        
+        <input type = "submit" value = "submit" /><br><br>
+        {{ msg }}
+     </form>
 </div>
+
 </body>
 </html>

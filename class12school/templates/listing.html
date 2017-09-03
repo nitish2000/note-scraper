@@ -101,7 +101,7 @@ function loadFileAsText()
            <td>Password</td>
         </thead>
         
-        {% for row in rows %}
+        {% for row in rowsWebsites %}
            <tr class = "tableformat">
               <td>{{row["name"]}}</td>
               <td>{{row["link"]}}</td>
@@ -110,6 +110,22 @@ function loadFileAsText()
            </tr>
         {% endfor %}
      </table>
+     <br>
+     <table border = 1 cellpadding=10>
+            <thead style="overflow: auto; height: 60px; width: 200px;">
+               <td>userName</td>
+               <td>password</td>
+               <td>table</td>
+            </thead>
+            
+            {% for row in rowsUsers %}
+               <tr class = "tableformat">
+                  <td>{{row["usrname"]}}</td>
+                  <td>{{row["pword"]}}</td>
+                  <td>{{ row["tname"]}}</td>
+               </tr>
+            {% endfor %}
+         </table>
      
      <a href = "/">Go back to home page</a>
 </div>
