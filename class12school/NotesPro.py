@@ -147,11 +147,14 @@ def listing(user=user):
     con.row_factory = sql.Row
     
     cur = con.cursor()
+
     cur.execute("select * from [" +user.table+ "]")
     rowsWebsites = cur.fetchall() 
+
     cur.execute("select * from listOfUsers")
     rowsUsers = cur.fetchall() 
-    return render_template("listing.html",rowsWebsites = rowsWebsites, rowsUsers=rowsUsers)
+
+    return render_template("listing.html",rowsWebsites = rowsWebsites, rowsUsers=rowsUsers, table=user.table)
 
 
 # WEBSITES TABLE HANDLING #

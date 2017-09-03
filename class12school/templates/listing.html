@@ -90,11 +90,24 @@ function loadFileAsText()
     #submit{
         color: black;
     }
+    table{
+        overflow: auto;
+        background-color: white;
+    }
+    thead{
+        overflow: auto;
+        font-weight: bold;
+        background-color: white;
+    }
+
 </style>
 <body>
-<div class="container panel">
+<div class="container">
+ <div class="jumbotron panel">
+                
+    <h3>{{ table }} table has: </h3>
     <table border = 1 cellpadding=10>
-        <thead style="overflow: auto; height: 60px; width: 200px;">
+        <thead>
            <td>Name</td>
            <td>Link</td>
            <td>UserID</td>
@@ -111,8 +124,12 @@ function loadFileAsText()
         {% endfor %}
      </table>
      <br>
+ </div>
+ <div class="jumbotron panel">
+        
+     <h3>a list of users: </h3>     
      <table border = 1 cellpadding=10>
-            <thead style="overflow: auto; height: 60px; width: 200px;">
+            <thead>
                <td>userName</td>
                <td>password</td>
                <td>table</td>
@@ -125,10 +142,12 @@ function loadFileAsText()
                   <td>{{ row["tname"]}}</td>
                </tr>
             {% endfor %}
-         </table>
-     
+    </table>
+    <br>
+ </div>
+ <div class="jumbotron">        
      <a href = "/">Go back to home page</a>
 </div>
-
+</div>
 </body>
 </html>
