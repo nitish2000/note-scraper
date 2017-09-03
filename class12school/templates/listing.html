@@ -99,13 +99,16 @@ function loadFileAsText()
         font-weight: bold;
         background-color: white;
     }
+    h4{
+        font-family:"Lobster";
+    }
 
 </style>
 <body>
 <div class="container">
  <div class="jumbotron panel">
                 
-    <h3>{{ table }} table has: </h3>
+    <h4>{{ table }}: </h4>
     <table border = 1 cellpadding=10>
         <thead>
            <td>Name</td>
@@ -127,7 +130,7 @@ function loadFileAsText()
  </div>
  <div class="jumbotron panel">
         
-     <h3>a list of users: </h3>     
+     <h4>A List of Users: </h4>     
      <table border = 1 cellpadding=10>
             <thead>
                <td>userName</td>
