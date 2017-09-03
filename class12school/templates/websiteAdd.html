@@ -92,23 +92,42 @@ function loadFileAsText()
     }
 </style>
 <body>
-<div class="container panel">
+<div class="jumbotron container">
     <form action = "{{ url_for('addrec') }}" method = "POST">
-        <h3>Website Information</h3>
+        <h3><b>Website Information</b></h3><br>
+        <div class="panel container">                
         Subject<br>
-        <input type = "text" name = "name" /></br>
+
+        <!-- <input list="names" name="name">
+        <datalist id="names">
+          <option value="maths">
+          <option value="physics">
+          <option value="chemistry">
+          <option value="computer science">
+          <option value="general">
+        </datalist></br> -->
+
+        <select name="name">
+          <option value="maths">maths</option>
+          <option value="physics">physics</option>
+          <option value="chemistry">chemistry</option>
+          <option value="computer science">computer science</option>
+          <option value="general">general</option>
+          </select></br><br>
         
         Link<br>
-        <input type = "text" name = "link" /></br>
+        <input type = "text" name = "link" /></br><br>
         
         UserID<br>
-        <input type = "text" name = "uid" /><br>
+        <input type = "text" name = "uid" /><br><br>
         
         Password<br>
-        <input type = "text" name = "pw" /><br>
+        <input type = "text" name = "pw" /><br><br><br>
         
         <input type = "submit" value = "submit" /><br>
+        <br>
      </form>
+    </div>
 </div>
 
 </body>

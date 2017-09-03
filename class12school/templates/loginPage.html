@@ -96,10 +96,10 @@ function loadFileAsText()
     <form action = "{{ url_for('oldUser') }}" method = "POST">
         <h3>Log Into Your Account</h3>
         Name<br>
-        <input type = "text" name = "usrname" value="{{ username }}" /></br>
+        <input type = "text" name = "usrname" value="{{ username }}" required/></br>
         
         Password<br>
-        <input type = "password" name = "pword" /><br>
+        <input type = "password" name = "pword" required/><br>
         
         <input type = "submit" value = "Log In" /><br><br>
         {{ msg }}
