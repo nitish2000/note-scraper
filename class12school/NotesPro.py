@@ -46,6 +46,7 @@ def CompSci(user=user):
 
 @app.route('/getNotes/<sub>', methods = ['GET', 'POST'])
 def getNotes(sub, user=user):
+    user = getUser()
     con = sql.connect("database.db")
     con.row_factory = sql.Row
     
@@ -134,7 +135,7 @@ def createWebsitesTable(user=user):
     try:
         conn = sql.connect('database.db')
         print "Opened database successfully";
-        conn.execute('CREATE TABLE IF NOT EXISTS ['+user.table+'](name TEXT, link TEXT UNIQUE, uid TEXT, pw TEXT)')
+        conn.execute('CREATE TABLE IF NOT EXISTS ['+user.table+'](name TEXT, link TEXT PRIMARY KEY, uid TEXT, pw TEXT)')
         print "Table MADE";
         conn.close()
     except Exception as e:
@@ -145,7 +146,7 @@ def createUserTable():
     try:
         with sql.connect("database.db") as con:
             cur = con.cursor()
-            cur.execute('CREATE TABLE IF NOT EXISTS listOfUsers(usrname TEXT UNIQUE, pword TEXT, tname TEXT)')
+            cur.execute('CREATE TABLE IF NOT EXISTS listOfUsers(usrname TEXT PRIMARY KEY, pword TEXT, tname TEXT)')
             con.commit()
             print "Table EXISTS";
     except Exception as e:
@@ -176,7 +177,7 @@ def listing(user=user):
     cur.execute("select * from listOfUsers")
     rowsUsers = cur.fetchall() 
 
-    return render_template("listing.html",rowsWebsites = rowsWebsites, rowsUsers=rowsUsers, table=user.table)
+    return render_template("listing.html",rowsWebsites = rowsWebsites, rowsUsers=rowsUsers, table=user.description())
 
 
 # WEBSITES TABLE HANDLING #
@@ -287,6 +288,12 @@ def oldUser(user = user):
         finally:
             con.close()
             return render_template("loginMsg.html", msg = msg, user = user)
+
+@app.route('/logout')
+def logout(user=user):
+    user = getUser()
+    changeUser(userClass.defaultUser())
+    return render_template('logout.html', user=user)
 
 def process():
     pass

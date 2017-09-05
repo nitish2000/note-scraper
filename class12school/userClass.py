@@ -12,7 +12,7 @@ class User:
     table = "websites"
 
     def description(self):
-        desc_str = "%s uses database a %s worth for scraping" % (self.name, self.database)
+        desc_str = "%s uses websites in table %s for scraping" % (self.userName, self.table)
         return desc_str
 
     def setTable():
