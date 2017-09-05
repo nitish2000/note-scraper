@@ -5,6 +5,7 @@ import sqlite3 as sql
 import wolframalpha
 import userClass
 from copy import deepcopy
+import scraping
 
 app = Flask(__name__)
 
@@ -52,7 +53,14 @@ def getNotes(sub, user=user):
     cur.execute("SELECT * FROM [" +user.table+ "] WHERE name=?", (sub,))
     
     rows = cur.fetchall()
-    return render_template("scrapeResults.html", result = rows, item=request.form['searchItem'])
+    urls= []
+    for value in rows:
+        urls.append(str(value['link']))
+    print urls
+    toFind = str(request.form['searchItem'])
+    url, newData = scraping.selectFunction(str(request.form['searchItem']), urls)    
+
+    return render_template("scrapeResults.html", result = newData, item = toFind, link = url)
 
 @app.route('/search', methods = ['GET', 'POST'])
 def getResults(user=user):   
