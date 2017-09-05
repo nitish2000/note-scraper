@@ -118,12 +118,14 @@ function loadFileAsText()
         </div>
     </div>
 
-   <div id = "about" class="panel jumbotron">
+    <div id = "about" class="panel jumbotron">
         <p><h3><b>Search</b></h3></p>
-        <p>The ChemScraper will collect the required information related to the topic you will type in the search bar. Go ahead!</p>
+        <p>The ChemScraper will collect the required information related to the topic you type in the search bar. Go ahead!</p>
         <div id = "submit">
-            <input type = "text" name = "Enter required topic...." size = "135">
+            <form action = "{{ url_for('getNotes', sub='chemistry')}}" method = "POST">
+            <input name = "searchItem" type = "text" placeholder = "Enter required topic...." size = "135" required>
             <input type = "submit" value = "Search">
+            </form>
         </div>
     </div>
 

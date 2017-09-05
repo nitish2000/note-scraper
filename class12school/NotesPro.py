@@ -50,9 +50,15 @@ def getNotes(sub, user=user):
     con.row_factory = sql.Row
     
     cur = con.cursor()
-    cur.execute("SELECT * FROM [" +user.table+ "] WHERE name=?", (sub,))
-    
-    rows = cur.fetchall()
+    rows = ""
+
+    if (sub.lower()=="general"):
+        cur.execute("SELECT * FROM [" +user.table+ "]")
+        rows = cur.fetchall()
+    else:
+        cur.execute("SELECT * FROM [" +user.table+ "] WHERE name=? OR name=?", (sub, "general",))
+        rows = cur.fetchall()
+
     urls= []
     for value in rows:
         urls.append(str(value['link']))
@@ -75,6 +81,7 @@ def getResults(user=user):
     l={}
     i=0
     for line in lines:
+        
         if re.search('<*>', line):
             if (i!=0):
                 data.append(l)
@@ -83,7 +90,11 @@ def getResults(user=user):
             l['key'] = re.search('<(.*)>', line).group(1)
             l['value'] = []
         elif re.search('http*', line):
+            
             l['value'].append(line[:-1])
+        
+    data.append(l)
+
     # adding websites.txt to database
     msg =[]
     for obj in data:

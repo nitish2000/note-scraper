@@ -18,6 +18,7 @@ def selectFunction(find, urls):
 
         # else: 
         #     return "sorry, can't find"
+    return urls, ["Couldn't find results for your query anywhere :(", "You might wanna add another website request for scraping :)"]
 
 def mathsisfun(find):
     findit = find.replace(' ', '+')
@@ -40,7 +41,7 @@ def mathsisfun(find):
                 
                 if ("http://" in (link.get('href'))) and (".htm" in (link.get('href'))):
                     
-                    print link.get('href')
+                    # print link.get('href')
                     newData = requests.get(link.get('href')).text
                     soup = BeautifulSoup(newData, 'html.parser')
                     soupGet = soup.find(id = 'content').text
