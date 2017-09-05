@@ -62,9 +62,12 @@ def getNotes(sub, user=user):
     urls= []
     for value in rows:
         urls.append(str(value['link']))
+    
     print urls
+    
     toFind = str(request.form['searchItem'])
-    url, newData = scraping.selectFunction(str(request.form['searchItem']), urls)    
+
+    url, newData = scraping.selectFunction(toFind, urls, 0, sub)    
 
     return render_template("scrapeResults.html", result = newData, item = toFind, link = url)
 
