@@ -118,28 +118,34 @@ def mathsisfun(discover):
 
 
 def wikipedia(discover):
-    
-    discoveryBay = discover
-    discoverit = discover.replace(' ', '_').replace('\'', '%27').replace('!', '').replace('!', '')
-    url = "https://en.wikipedia.org/wiki/"+discoverit
 
     try:
+        
         try:
-            
+            discoverit = discoveryBay.replace(' ', '+').replace('\'', '%27').replace('!', '').replace('!', '')
+            url = "https://en.wikipedia.org/w/index.php?title=Special:Search&profile=all&search="+discoverit
             r  = requests.get(url)
             data = r.text
             soup = BeautifulSoup(data, 'html.parser')
             soupGet = soup.get_text()
             
-            if '_' in discoverit:
-                discover = discover.split()[0]
+            legible = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower()
+            
+            if ("Wikipedia does not have an article with this exact name".lower() in legible):
+                raise Exception('raised')
 
-            if ("Wikipedia does not have an article with this exact name".lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
-                raise Exception('This is the exception you expect to handle')
-
-            elif (discover.lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
+            else:
+                soupGet = soup.find("div", class_ = 'mw-search-result-heading')
+                link = soupGet.find_all('a')[0]
                 
-                soupGet = soup.find(id = 'mw-content-text').text
+                newData = requests.get("https://en.wikipedia.org"+link.get('href')).text
+                print (newData)
+                soup = BeautifulSoup(newData, 'html.parser')
+                soupGet = soup.find("div", class_ = 'mw-parser-output')
+                children = soupGet.findChildren()
+                for child in children:
+                    print child
+                .text
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                 while '' in newData:
@@ -149,56 +155,8 @@ def wikipedia(discover):
                     newData = [newData]
 
                 return url, newData
-
-            raise Exception('raised')
-
         except:
-            print ("wiki direct don't work")
-        
-        if (' ' in discoveryBay):
-            discover = discoveryBay.split()
-
-            combos = itertools.permutations(discover, len(discover)-1)
-
-            for discover in combos:
-                print discover
-                discoverit =" "
-
-                newD = list(discover)
-
-                for word in newD:
-                    discoverit=str(discoverit)+' '+str(word)
-                
-                
-                discoverit = discoverit.lstrip().replace(' ', '_').replace('\'', '%27')
-                url = "https://en.wikipedia.org/wiki/"+discoverit
-                r  = requests.get(url)
-                data = r.text
-                soup = BeautifulSoup(data, 'html.parser')
-                soupGet = soup.get_text()
-                
-                if '_' in discoverit:
-                    discoverit = discoverit.split()[0]
-
-                if ("Wikipedia does not have an article with this exact name".lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
-                    print ('next')
-
-                elif (discoverit.lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
-                    
-                    soupGet = soup.find(id = 'mw-content-text').text
-                    newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
-
-                    while '' in newData:
-                        newData.remove('')
-                                        
-                    if not isinstance(newData, list):
-                        newData = [newData]
-
-                    return url, newData
-                else:
-                    continue
-        else:
-            raise Exception('This is the exception you expect to handle')
+            print ("wiki link 2 works not")
 
     except:
         return url, ["uh oh, nothing here"]
