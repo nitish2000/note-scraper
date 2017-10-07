@@ -11,7 +11,7 @@ def selectFunction(discover, urls, counter, sub):
             if "mathsisfun" in urls[counter]:
                 urlx, newData = mathsisfun(discover)
                 if newData[0]!="uh oh, nothing here":
-                    print (urlx, newData)
+                    # print (urlx, newData)
                     return urlx, newData
 
             # if "mathsisfun" in urls[counter]:
@@ -58,7 +58,7 @@ def mathsisfun(discover):
         r  = requests.get(url)
         data = r.text
         soup = BeautifulSoup(data, 'html.parser')
-        soupGet = soup.get_text()
+        soupGet = ""
 
         try:
             soupResult = soup.find(id = 'results')
@@ -69,8 +69,12 @@ def mathsisfun(discover):
                     # print link.get('href')
                     newData = requests.get(link.get('href')).text
                     soup = BeautifulSoup(newData, 'html.parser')
-                    soupGet = soup.find(id = 'content').text
-                    newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
+                    soupGet = soup.find(id = 'content').find_all(['h3', 'em', 'span', 'li', 'h1', 'h2'])
+
+                    newData = ["" if "Example" in unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip().upper() if item.name == "h1" or item.name == "h2" else "*\t"+unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() if item.name == "li" else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() for item in soupGet][:15]
+                    # soupGet = ''.join(map(unicode, soupGet))
+
+                    # newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                     while '' in newData:
                         newData.remove('')
@@ -81,14 +85,15 @@ def mathsisfun(discover):
                     return url, newData
 
 
-        except:
+        except Exception as e:
+            print(e)
             print("and failed")
 
         url = "https://www.mathsisfun.com/sphider/search.php?query="+discoverit+"&type=or&results=1&search=1"
         r  = requests.get(url)
         data = r.text
         soup = BeautifulSoup(data, 'html.parser')
-        soupGet = soup.get_text()
+        soupGet = ""
 
         soupResult = soup.find(id = 'results')
 
@@ -98,8 +103,12 @@ def mathsisfun(discover):
                 # print link.get('href')
                 newData = requests.get(link.get('href')).text
                 soup = BeautifulSoup(newData, 'html.parser')
-                soupGet = soup.find(id = 'content').text
-                newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
+                soupGet = soup.find(id = 'content').find_all(['h3', 'em', 'span', 'li', 'h1', 'h2', 'img'])
+
+                newData = ["" if "Example" in unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip().upper() if item.name == "h1" or item.name == "h2" else "*\t"+unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() if item.name == "li" else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() for item in soupGet][:10]
+                # soupGet = ''.join(map(unicode, soupGet))
+
+                # newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                 while '' in newData:
                     newData.remove('')
@@ -142,7 +151,7 @@ def wikipedia(discover):
                     result = {}
                     headline = {}
                     for tr in table.find_all('tr'):
-                        print tr
+
                         if tr.find('th'):
                             try:
                                 result[tr.find('th').text] = tr.find('td').text
@@ -155,9 +164,9 @@ def wikipedia(discover):
                 
                 except Exception as e:
                     print (e)
-                
+
                 soupGet = soup.find("div", class_ = 'mw-parser-output').find("p").text
-                if len(soupGet.split(' '))<20:
+                if len(soupGet.split(' '))<10:
                      soupGet = soup.find("div", class_ = 'mw-parser-output').text
 
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
@@ -186,24 +195,24 @@ def wikipedia(discover):
                     result = {}
                     headline = {}
                     for tr in table.find_all('tr'):
-                        print tr
+
                         if tr.find('th'):
                             try:
                                 result[tr.find('th').text] = tr.find('td').text
                             except:
-                                headline["SUBJECT"] = tr.find('th').text.upper()
+                                headline["Subject"] = tr.find('th').text
                     
                     newData = [a+": "+result[a] for a in result]
-                    newData = [a+": "+headline[a] for a in headline] + newData
+                    newData = ["______________________"] + [a+": "+headline[a] for a in headline] + newData + ["______________________"]
                     finalData = newData
                 
                 except Exception as e:
                     print (e)
 
                 soupGet = soup.find("div", class_ = 'mw-parser-output').find("p").text
-                if len(soupGet.split(' '))<20:
+                if len(soupGet.split(' '))<10:
                      soupGet = soup.find("div", class_ = 'mw-parser-output').text
-
+                     
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                 while '' in newData:
