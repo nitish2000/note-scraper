@@ -136,24 +136,29 @@ def wikipedia(discover):
 
             elif ("From Wikipedia, the free encyclopedia".lower() in legible):
                 finalData = []
-                table = soup.find('table', class_='infobox vcard')
-                result = {}
+                
                 try:
+                    table = soup.find_all('table', class_=re.compile('infobox'))[0]
+                    result = {}
+                    headline = {}
                     for tr in table.find_all('tr'):
                         print tr
                         if tr.find('th'):
                             try:
                                 result[tr.find('th').text] = tr.find('td').text
                             except:
-                                result["About"] = tr.find('th').text.upper()
+                                headline["SUBJECT"] = tr.find('th').text.upper()
                     
                     newData = [a+": "+result[a] for a in result]
+                    newData = [a+": "+headline[a] for a in headline] + newData
                     finalData = newData
                 
                 except Exception as e:
                     print (e)
-
-                soupGet = soup.find("div", class_ = 'mw-parser-output').text
+                
+                soupGet = soup.find("div", class_ = 'mw-parser-output').find("p").text
+                if len(soupGet.split(' '))<20:
+                     soupGet = soup.find("div", class_ = 'mw-parser-output').text
 
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
@@ -174,25 +179,30 @@ def wikipedia(discover):
                 newData = requests.get("https://en.wikipedia.org"+link.get('href')).text
                 soup = BeautifulSoup(newData, 'html.parser')
 
-                table = soup.find_all('table', class_=re.compile('infobox'))[0]
+                finalData = []
                 
-                result = {}
                 try:
+                    table = soup.find_all('table', class_=re.compile('infobox'))[0]
+                    result = {}
+                    headline = {}
                     for tr in table.find_all('tr'):
                         print tr
                         if tr.find('th'):
                             try:
                                 result[tr.find('th').text] = tr.find('td').text
                             except:
-                                result["About"] = tr.find('th').text.upper()
+                                headline["SUBJECT"] = tr.find('th').text.upper()
                     
                     newData = [a+": "+result[a] for a in result]
-                    return url, newData
+                    newData = [a+": "+headline[a] for a in headline] + newData
+                    finalData = newData
                 
                 except Exception as e:
                     print (e)
 
-                soupGet = soup.find("div", class_ = 'mw-parser-output').text
+                soupGet = soup.find("div", class_ = 'mw-parser-output').find("p").text
+                if len(soupGet.split(' '))<20:
+                     soupGet = soup.find("div", class_ = 'mw-parser-output').text
 
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
@@ -202,7 +212,9 @@ def wikipedia(discover):
                 if not isinstance(newData, list):
                     newData = [newData]
 
-                return url, newData
+                finalData+=newData
+
+                return url, finalData
         except:
             print ("wikipedia failed")
 
