@@ -135,6 +135,23 @@ def wikipedia(discover):
                 raise Exception('raised')
 
             elif ("From Wikipedia, the free encyclopedia".lower() in legible):
+                finalData = []
+                table = soup.find('table', class_='infobox vcard')
+                result = {}
+                try:
+                    for tr in table.find_all('tr'):
+                        print tr
+                        if tr.find('th'):
+                            try:
+                                result[tr.find('th').text] = tr.find('td').text
+                            except:
+                                result["About"] = tr.find('th').text.upper()
+                    
+                    newData = [a+": "+result[a] for a in result]
+                    finalData = newData
+                
+                except Exception as e:
+                    print (e)
 
                 soupGet = soup.find("div", class_ = 'mw-parser-output').text
 
@@ -146,15 +163,35 @@ def wikipedia(discover):
                 if not isinstance(newData, list):
                     newData = [newData]
 
-                return url, newData
+                finalData+=newData
+
+                return url, finalData
 
             else:
                 soupGet = soup.find_all("div", class_ = 'mw-search-result-heading')[0]
                 link = soupGet.find_all('a')[0]
                 
                 newData = requests.get("https://en.wikipedia.org"+link.get('href')).text
-                print (newData)
                 soup = BeautifulSoup(newData, 'html.parser')
+
+                table = soup.find_all('table', class_=re.compile('infobox'))[0]
+                
+                result = {}
+                try:
+                    for tr in table.find_all('tr'):
+                        print tr
+                        if tr.find('th'):
+                            try:
+                                result[tr.find('th').text] = tr.find('td').text
+                            except:
+                                result["About"] = tr.find('th').text.upper()
+                    
+                    newData = [a+": "+result[a] for a in result]
+                    return url, newData
+                
+                except Exception as e:
+                    print (e)
+
                 soupGet = soup.find("div", class_ = 'mw-parser-output').text
 
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
