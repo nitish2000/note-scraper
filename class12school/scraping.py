@@ -122,7 +122,7 @@ def wikipedia(discover):
     try:
         
         try:
-            discoverit = discoveryBay.replace(' ', '+').replace('\'', '%27').replace('!', '').replace('!', '')
+            discoverit = discover.replace(' ', '+').replace('\'', '%27').replace('!', '%21').replace(',', '%2C')
             url = "https://en.wikipedia.org/w/index.php?title=Special:Search&profile=all&search="+discoverit
             r  = requests.get(url)
             data = r.text
@@ -134,18 +134,29 @@ def wikipedia(discover):
             if ("Wikipedia does not have an article with this exact name".lower() in legible):
                 raise Exception('raised')
 
+            elif ("From Wikipedia, the free encyclopedia".lower() in legible):
+
+                soupGet = soup.find("div", class_ = 'mw-parser-output').text
+
+                newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
+
+                while '' in newData:
+                    newData.remove('')
+                                    
+                if not isinstance(newData, list):
+                    newData = [newData]
+
+                return url, newData
+
             else:
-                soupGet = soup.find("div", class_ = 'mw-search-result-heading')
+                soupGet = soup.find_all("div", class_ = 'mw-search-result-heading')[0]
                 link = soupGet.find_all('a')[0]
                 
                 newData = requests.get("https://en.wikipedia.org"+link.get('href')).text
                 print (newData)
                 soup = BeautifulSoup(newData, 'html.parser')
-                soupGet = soup.find("div", class_ = 'mw-parser-output')
-                children = soupGet.findChildren()
-                for child in children:
-                    print child
-                .text
+                soupGet = soup.find("div", class_ = 'mw-parser-output').text
+
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                 while '' in newData:
@@ -156,7 +167,7 @@ def wikipedia(discover):
 
                 return url, newData
         except:
-            print ("wiki link 2 works not")
+            print ("wikipedia failed")
 
     except:
         return url, ["uh oh, nothing here"]
