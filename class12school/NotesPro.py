@@ -1,11 +1,9 @@
 from flask import Flask, render_template, request
 import re, json, requests, urllib2
-from bs4 import BeautifulSoup
 import sqlite3 as sql
-import wolframalpha
-import userClass
 from copy import deepcopy
 import scraping
+import userClass
 
 app = Flask(__name__)
 
