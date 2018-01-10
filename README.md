@@ -3,6 +3,8 @@
 1. please go to: http://127.0.0.1:5000/
 2. Then go to: http://127.0.0.1:5000/Notescraper
 
+INCOMPLETE -- DJANGO
+
 (order important)
 
 ## noteHome ##
