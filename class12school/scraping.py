@@ -11,7 +11,7 @@ def selectFunction(discover, urls, counter, sub):
             if "mathsisfun" in urls[counter]:
                 urlx, newData = mathsisfun(discover)
                 if newData[0]!="uh oh, nothing here":
-                    # print (urlx, newData)
+                    print (urlx, newData)
                     return urlx, newData
 
             # if "mathsisfun" in urls[counter]:
@@ -33,7 +33,6 @@ def selectFunction(discover, urls, counter, sub):
             urlx, newData = wikipedia(discover)
 
             if newData[0]!="uh oh, nothing here":
-
                 return urlx, newData
 
             else:
@@ -48,6 +47,7 @@ def selectFunction(discover, urls, counter, sub):
 
         raise Exception ('raised')
 
+
     except:
         return urls, ["Couldn't discover results for your query anywhere :(", "You might wanna add another website request for scraping :)"]
 
@@ -58,7 +58,7 @@ def mathsisfun(discover):
         r  = requests.get(url)
         data = r.text
         soup = BeautifulSoup(data, 'html.parser')
-        soupGet = ""
+        soupGet = soup.get_text()
 
         try:
             soupResult = soup.find(id = 'results')
@@ -69,12 +69,8 @@ def mathsisfun(discover):
                     # print link.get('href')
                     newData = requests.get(link.get('href')).text
                     soup = BeautifulSoup(newData, 'html.parser')
-                    soupGet = soup.find(id = 'content').find_all(['h3', 'em', 'span', 'li', 'h1', 'h2'])
-
-                    newData = ["" if "Example" in unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip().upper() if item.name == "h1" or item.name == "h2" else "*\t"+unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() if item.name == "li" else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() for item in soupGet][:15]
-                    # soupGet = ''.join(map(unicode, soupGet))
-
-                    # newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
+                    soupGet = soup.find(id = 'content').text
+                    newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                     while '' in newData:
                         newData.remove('')
@@ -85,15 +81,14 @@ def mathsisfun(discover):
                     return url, newData
 
 
-        except Exception as e:
-            print(e)
+        except:
             print("and failed")
 
         url = "https://www.mathsisfun.com/sphider/search.php?query="+discoverit+"&type=or&results=1&search=1"
         r  = requests.get(url)
         data = r.text
         soup = BeautifulSoup(data, 'html.parser')
-        soupGet = ""
+        soupGet = soup.get_text()
 
         soupResult = soup.find(id = 'results')
 
@@ -103,12 +98,8 @@ def mathsisfun(discover):
                 # print link.get('href')
                 newData = requests.get(link.get('href')).text
                 soup = BeautifulSoup(newData, 'html.parser')
-                soupGet = soup.find(id = 'content').find_all(['h3', 'em', 'span', 'li', 'h1', 'h2', 'img'])
-
-                newData = ["" if "Example" in unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip().upper() if item.name == "h1" or item.name == "h2" else "*\t"+unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() if item.name == "li" else unicodedata.normalize('NFKD', item.text).encode('ascii','ignore').lstrip() for item in soupGet][:10]
-                # soupGet = ''.join(map(unicode, soupGet))
-
-                # newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
+                soupGet = soup.find(id = 'content').text
+                newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                 while '' in newData:
                     newData.remove('')
@@ -127,48 +118,28 @@ def mathsisfun(discover):
 
 
 def wikipedia(discover):
+    
+    discoveryBay = discover
+    discoverit = discover.replace(' ', '_').replace('\'', '%27').replace('!', '').replace('!', '')
+    url = "https://en.wikipedia.org/wiki/"+discoverit
 
     try:
-        
         try:
-            discoverit = discover.replace(' ', '+').replace('\'', '%27').replace('!', '%21').replace(',', '%2C')
-            url = "https://en.wikipedia.org/w/index.php?title=Special:Search&profile=all&search="+discoverit
+            
             r  = requests.get(url)
             data = r.text
             soup = BeautifulSoup(data, 'html.parser')
             soupGet = soup.get_text()
             
-            legible = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower()
-            
-            if ("Wikipedia does not have an article with this exact name".lower() in legible):
-                raise Exception('raised')
+            if '_' in discoverit:
+                discover = discover.split()[0]
 
-            elif ("From Wikipedia, the free encyclopedia".lower() in legible):
-                finalData = []
+            if ("Wikipedia does not have an article with this exact name".lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
+                raise Exception('This is the exception you expect to handle')
+
+            elif (discover.lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
                 
-                try:
-                    table = soup.find_all('table', class_=re.compile('infobox'))[0]
-                    result = {}
-                    headline = {}
-                    for tr in table.find_all('tr'):
-
-                        if tr.find('th'):
-                            try:
-                                result[tr.find('th').text] = tr.find('td').text
-                            except:
-                                headline["SUBJECT"] = tr.find('th').text.upper()
-                    
-                    newData = [a+": "+result[a] for a in result]
-                    newData = [a+": "+headline[a] for a in headline] + newData
-                    finalData = newData
-                
-                except Exception as e:
-                    print (e)
-
-                soupGet = soup.find("div", class_ = 'mw-parser-output').find("p").text
-                if len(soupGet.split(' '))<10:
-                     soupGet = soup.find("div", class_ = 'mw-parser-output').text
-
+                soupGet = soup.find(id = 'mw-content-text').text
                 newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
 
                 while '' in newData:
@@ -177,55 +148,57 @@ def wikipedia(discover):
                 if not isinstance(newData, list):
                     newData = [newData]
 
-                finalData+=newData
+                return url, newData
 
-                return url, finalData
+            raise Exception('raised')
 
-            else:
-                soupGet = soup.find_all("div", class_ = 'mw-search-result-heading')[0]
-                link = soupGet.find_all('a')[0]
-                
-                newData = requests.get("https://en.wikipedia.org"+link.get('href')).text
-                soup = BeautifulSoup(newData, 'html.parser')
-
-                finalData = []
-                
-                try:
-                    table = soup.find_all('table', class_=re.compile('infobox'))[0]
-                    result = {}
-                    headline = {}
-                    for tr in table.find_all('tr'):
-
-                        if tr.find('th'):
-                            try:
-                                result[tr.find('th').text] = tr.find('td').text
-                            except:
-                                headline["Subject"] = tr.find('th').text
-                    
-                    newData = [a+": "+result[a] for a in result]
-                    newData = ["______________________"] + [a+": "+headline[a] for a in headline] + newData + ["______________________"]
-                    finalData = newData
-                
-                except Exception as e:
-                    print (e)
-
-                soupGet = soup.find("div", class_ = 'mw-parser-output').find("p").text
-                if len(soupGet.split(' '))<10:
-                     soupGet = soup.find("div", class_ = 'mw-parser-output').text
-                     
-                newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
-
-                while '' in newData:
-                    newData.remove('')
-                                    
-                if not isinstance(newData, list):
-                    newData = [newData]
-
-                finalData+=newData
-
-                return url, finalData
         except:
-            print ("wikipedia failed")
+            print ("wiki direct don't work")
+        
+        if (' ' in discoveryBay):
+            discover = discoveryBay.split()
+
+            combos = itertools.permutations(discover, len(discover)-1)
+
+            for discover in combos:
+                print discover
+                discoverit =" "
+
+                newD = list(discover)
+
+                for word in newD:
+                    discoverit=str(discoverit)+' '+str(word)
+                
+                
+                discoverit = discoverit.lstrip().replace(' ', '_').replace('\'', '%27')
+                url = "https://en.wikipedia.org/wiki/"+discoverit
+                r  = requests.get(url)
+                data = r.text
+                soup = BeautifulSoup(data, 'html.parser')
+                soupGet = soup.get_text()
+                
+                if '_' in discoverit:
+                    discoverit = discoverit.split()[0]
+
+                if ("Wikipedia does not have an article with this exact name".lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
+                    print ('next')
+
+                elif (discoverit.lower() in ((unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore')).lower())):
+                    
+                    soupGet = soup.find(id = 'mw-content-text').text
+                    newData = (unicodedata.normalize('NFKD', soupGet).encode('ascii','ignore').lstrip()).split('\n')
+
+                    while '' in newData:
+                        newData.remove('')
+                                        
+                    if not isinstance(newData, list):
+                        newData = [newData]
+
+                    return url, newData
+                else:
+                    continue
+        else:
+            raise Exception('This is the exception you expect to handle')
 
     except:
         return url, ["uh oh, nothing here"]
