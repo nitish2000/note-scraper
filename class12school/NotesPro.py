@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
-import re, json, requests, urllib2
+import re
 import sqlite3 as sql
+import userClass
 from copy import deepcopy
 import scraping
-import userClass
 
 app = Flask(__name__)
 
@@ -38,7 +38,7 @@ def Physics(user=user):
 def Chemistry(user=user):
     return render_template("searchChem.html")
 
-@app.route('/Computer Science', methods=['GET', 'POST'])
+@app.route('/Computer', methods=['GET', 'POST'])
 def CompSci(user=user):
     return render_template("searchnitish.html")
 
@@ -132,9 +132,9 @@ def createWebsitesTable(user=user):
     user = getUser()
     try:
         conn = sql.connect('database.db')
-        print "Opened database successfully";
+        print "Opened database successfully"
         conn.execute('CREATE TABLE IF NOT EXISTS ['+user.table+'](name TEXT, link TEXT PRIMARY KEY, uid TEXT, pw TEXT)')
-        print "Table MADE";
+        print "Table MADE"
         conn.close()
     except Exception as e:
         print (e)
@@ -146,7 +146,7 @@ def createUserTable():
             cur = con.cursor()
             cur.execute('CREATE TABLE IF NOT EXISTS listOfUsers(usrname TEXT PRIMARY KEY, pword TEXT, tname TEXT)')
             con.commit()
-            print "Table EXISTS";
+            print "Table EXISTS"
     except Exception as e:
         con.rollback()
         print (e)
